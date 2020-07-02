@@ -15,6 +15,7 @@ from botocore.exceptions import ClientError
 from datetime import datetime
 from lxml import etree as ET
 from onelogin.api.client import OneLoginClient
+import keyring
 
 try:
     from aws_assume_role.writer import ConfigFileWriter
@@ -66,6 +67,11 @@ def get_options():
     parser.add_argument("--onelogin-password",
                         dest="password",
                         help="OneLogin password")
+    parser.add_argument("--onelogin-password-from-keychain",
+                        dest="onelogin_password_from_keychain",
+                        action="store_true",
+                        default=False,
+                        help="Retrieve OneLogin password from Mac OS KeyChain Access")
     parser.add_argument("-a", "--onelogin-app-id",
                         dest="app_id",
                         help="OneLogin app id")
@@ -131,6 +137,10 @@ def get_options():
                 options.aws_role_name = profile['aws_role_name']
             if 'aws_region' in profile.keys() and profile['aws_region'] and not options.aws_region:
                 options.aws_region = profile['aws_region']
+        if config.get('keychain_access_entry_name'):
+            options.keychain_access_entry_name = config['keychain_access_entry_name']
+        else:
+            options.keychain_access_entry_name = None
 
     options.time = options.time
     if options.time < 15:
@@ -496,6 +506,13 @@ def main():
     role_arn = principal_arn = None
     default_aws_region = 'us-west-2'
     ip = None
+
+    if options.onelogin_password_from_keychain:
+        if not options.keychain_access_entry_name:
+            exception_message = "In order to use the --onelogin-password-from-keychain option, you must set "\
+                                "keychain_access_entry_name in your onelogin.aws.json file."
+            raise Exception(exception_message)
+        options.password = keyring.get_password(options.keychain_access_entry_name, options.username)
 
     if hasattr(client, 'ip'):
         ip = client.ip
