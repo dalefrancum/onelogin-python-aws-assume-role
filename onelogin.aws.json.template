@@ -2,6 +2,7 @@
   "app_id": "",
   "subdomain": "",
   "username": "",
+  "keychain_access_entry_name": "OneLogin",
   "profile": "",
   "duration": 3600,
   "aws_region": "",

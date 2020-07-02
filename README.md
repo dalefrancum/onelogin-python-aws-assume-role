@@ -181,6 +181,8 @@ AWS region (`--aws-region`)
 every time, you can specify these parameters as command-line arguments and
 the tool won't ask for them any more._
 
+ToDo - add a note about the new option here.
+
 _Note: Specifying your password directly with `--onelogin-password` is bad practice,
 you should use that flag together with password managers, eg. with the OSX Keychain:
 `--onelogin-password $(security find-generic-password -a $USER -s onelogin -w)`,
