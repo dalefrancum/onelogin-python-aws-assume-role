@@ -814,6 +814,11 @@ def main():
             print("Success!\n")
             print("Temporary AWS Credentials Granted via OneLogin\n")
             print("Updated AWS profile '%s' located at %s" % (profile_name, aws_file))
+            print("\n")
+            print("Now export the profile by typing:")
+            print("export AWS_PROFILE='%s'" % (profile_name))
+            print("\n")
+            print("Be sure AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are not set. Use unset if necessary.")
 
         if options.interactive:
             print("\n\nThe process regenerated credentials for user %s with AWS Role %s " % (username_or_email, selected_role))
